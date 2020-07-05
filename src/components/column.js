@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Task from "./task";
+import {Droppable} from "react-beautiful-dnd";
 
 const Container = styled.div`
     font-family: Roboto,-apple-system,BlinkMacSystemFont,sans-serif;
@@ -24,9 +25,16 @@ export default class Column extends React.Component {
         return (
             <Container>
                 <Title>{this.props.column.title}</Title>
-                <Tasks>
-                    {this.props.tasks.map((task) => <Task key={task.id} content={task.content}/>)}
-                </Tasks>
+                <Droppable droppableId={this.props.column.id}>
+                    {provided =>
+                        (
+                            <Tasks ref={provided.innerRef} {...provided.droppableProps}>
+                                {this.props.tasks.map((task, index) => <Task key={task.id} task={task} index={index}/>)}
+                                {provided.placeholder}
+                            </Tasks>
+                        )}
+                </Droppable>
+
             </Container>
         )
     }
