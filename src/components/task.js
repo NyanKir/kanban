@@ -3,7 +3,6 @@ import styled from "styled-components";
 import {Draggable} from "react-beautiful-dnd";
 
 const Container = styled.div`
-    min-height: 100px
     border: 1px solid lightgray;
     margin-bottom: 9px;
     padding: 8px;
