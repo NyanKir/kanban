@@ -8,10 +8,20 @@ const initalData={
     columns:{
         'columns-1':{
             id:'columns-1',
-            title:'To do',
+            title:'Сегодня',
             tasksIDs:['task-1','task-2','task-3','task-4'],
+        },
+        'columns-2':{
+            id:'columns-2',
+            title:'В процессе',
+            tasksIDs:[],
+        },
+        'columns-3':{
+            id:'columns-3',
+            title:'Сделано',
+            tasksIDs:[],
         }
     },
-    columnOrder:['columns-1']
+    columnOrder:['columns-1','columns-2','columns-3']
 };
 export default initalData

@@ -3,9 +3,11 @@ import styled from "styled-components";
 import {Draggable} from "react-beautiful-dnd";
 
 const Container = styled.div`
+    min-height: 100px
     border: 1px solid lightgray;
     margin-bottom: 9px;
     padding: 8px;
+    background-color: ${props=>(props.isDragging)? 'lightgreen':'white'};
 `;
 export default class Task extends React.Component {
     render() {
@@ -13,9 +15,9 @@ export default class Task extends React.Component {
         return (
             <Draggable draggableId={this.props.task.id} index={this.props.index}>
                 {
-                    (provided)=>(
+                    (provided, snapshot)=>(
                         <Container {...provided.draggableProps}
-                                   {...provided.dragHandleProps} ref={provided.innerRef}>
+                                   {...provided.dragHandleProps} ref={provided.innerRef} isDragging={snapshot.isDragging}>
                             {this.props.task.content}
                         </Container>
                     )
