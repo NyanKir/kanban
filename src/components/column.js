@@ -2,8 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import Task from "./task";
 import {Draggable, Droppable} from "react-beautiful-dnd";
+import Button from "./button";
 
 const Container = styled.div`
+    transition:background-color .3s ease;
+    background-color: #cfcfcf;
     height: fit-content;
     font-family: Roboto,-apple-system,BlinkMacSystemFont,sans-serif;
     width: 300px;
@@ -39,6 +42,7 @@ export default class Column extends React.Component {
                                     </Tasks>
                                 )}
                         </Droppable>
+                        <Button addNewTask={this.props.addNewTask} column={this.props.column}/>
                     </Container>
                 )}
             </Draggable>

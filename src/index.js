@@ -14,11 +14,14 @@ class App extends React.Component {
         super(props);
         this.state = initalData
         this.onDragEnd = this.onDragEnd.bind(this)
+        this.addNewTask = this.addNewTask.bind(this)
+    }
+    addNewTask=result=>{
+        console.log(result)
     }
 
     //Обработчик падения
     onDragEnd = result => {
-
 
         const {destination, source, draggableId,type} = result;
         console.log({destination, source, draggableId})
@@ -30,6 +33,7 @@ class App extends React.Component {
             return;
         }
 
+        //If moving column
         if(type==="column"){
             const newColumnOrder=Array.from(this.state.columnOrder);
             newColumnOrder.splice(source.index,1);
@@ -68,7 +72,6 @@ class App extends React.Component {
 
 
         // Moving from one list to another
-
         const startTaskIds = Array.from(start.tasksIDs);
         startTaskIds.splice(source.index, 1)
         const newStart = {
@@ -114,6 +117,7 @@ class App extends React.Component {
                                             column={column}
                                             key={columnId}
                                             index={index}
+                                            addNewTask={this.addNewTask}
                                         />
                                     })
                                 }
