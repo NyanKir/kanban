@@ -12,18 +12,12 @@ const Container = styled.div`
         background-color:#b0b0b0;
     }
 `
-const Plus = styled.div`
-  display:inline-block;
-  width:25px;
-  height:25px;
-  margin-right: 5px;
-  background:
-    linear-gradient(#000,#000),
-    linear-gradient(#000,#000),
-    transparent;
-  background-position:center;
-  background-size: 50% 2px,2px 50%; /*thickness = 2px, length = 50% (25px)*/
-  background-repeat:no-repeat;
+const Plus=styled.span`
+    height: 25px;
+    display: flex;
+    align-items: center;
+    margin-right: 5px;
+    font-size:34px
 `
 
 
@@ -44,7 +38,7 @@ export default class Button extends React.Component {
                 ? <Form addNewTask={this.props.addNewTask} column={this.props.column} changeShow={this.changeShow}/>
                 :
                 <Container onClick={() => this.changeShow()}>
-                    <Plus/>
+                    <Plus>&#43;</Plus>
                     <span>Добавить задание</span>
                 </Container>
 

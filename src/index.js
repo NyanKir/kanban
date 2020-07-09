@@ -15,7 +15,49 @@ class App extends React.Component {
         this.state = initalData
         this.onDragEnd = this.onDragEnd.bind(this)
         this.addNewTask = this.addNewTask.bind(this)
+        this.removeColumn = this.removeColumn.bind(this)
+        this.removeTask = this.removeTask.bind(this)
     }
+    //Удаление колонны
+    removeColumn(column,index){
+        delete this.state.columns[column.id];
+        this.state.columnOrder.splice(index,1)
+        this.setState({
+            ...this.state
+        })
+    }
+    //Удаление задания
+    removeTask(task,column,index){
+
+        this.setState((state)=>{
+            //Создаем копий
+            const Tasks=state.tasks;
+            const Columns=state.columns;
+            //Удалем
+            delete Tasks[task.id]
+            column.tasksIDs.splice(index,1)
+            Columns[column.id]=column
+            //Обновляем id заданний
+            const tasks={}
+            const tasksIDs = Object.values(Tasks).map((el,index)=>{
+                el['id']=`task-${index+1}`;
+                tasks[`task-${index+1}`]=el;
+                return `task-${index+1}`
+            })
+            //Добавления в 'tasksIDs' наши новые таски
+            Columns[column.id]['tasksIDs']=tasksIDs;
+
+            return{
+                ...state,
+                tasks:tasks,
+                column:{
+                    ...state.column,
+                    Columns
+                }
+            }
+        })
+    }
+    //Обработчик добавления задания
     addNewTask=(column,value)=>{
         if(!value){
             return true;
@@ -113,7 +155,6 @@ class App extends React.Component {
         }
 
         this.setState(newState)
-        return;
 
     }
 
@@ -135,6 +176,8 @@ class App extends React.Component {
                                             key={columnId}
                                             index={index}
                                             addNewTask={this.addNewTask}
+                                            removeTask={this.removeTask}
+                                            removeColumn={this.removeColumn}
                                         />
                                     })
                                 }

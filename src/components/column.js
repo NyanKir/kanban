@@ -14,8 +14,10 @@ const Container = styled.div`
     border: 1px solid lightgrey;
     border-radius: 2px;
 `;
-const Title = styled.h3`
-    padding: 8px
+const Title = styled.div`
+    padding:8px;
+    display: flex;
+    justify-content:space-between
 `;
 const Tasks = styled.div`
     padding: 8px;
@@ -25,6 +27,22 @@ const Tasks = styled.div`
     transition: background-color .2s ease;
     background-color: ${props=>(props.isDraggingOver)? 'skyblue':'white'};
 `;
+export const Close=styled.span`
+    cursor:pointer;
+    display: flex;
+    align-items: center;
+    margin-right: 5px;
+    font-size:34px;    
+    transition:.3s; 
+    height: ${props=> props.primary ? 'auto':'20px'};
+    
+
+    &:hover{
+        transition:.3s;
+        color:palevioletred;
+    }
+`;
+
 
 export default class Column extends React.Component {
     render() {
@@ -32,12 +50,16 @@ export default class Column extends React.Component {
             <Draggable draggableId={this.props.column.id} index={this.props.index}>
                 {(provided)=>(
                     <Container {...provided.draggableProps} ref={provided.innerRef}>
-                        <Title {...provided.dragHandleProps}>{this.props.column.title}</Title>
+                        <Title {...provided.dragHandleProps}>
+                            <h3>{this.props.column.title}</h3>
+                            <Close onClick={()=>this.props.removeColumn(this.props.column,this.props.index)} primary>&#215;</Close>
+                        </Title>
+
                         <Droppable droppableId={this.props.column.id} type="mask">
                             {(provided,snapshot) =>
                                 (
                                     <Tasks ref={provided.innerRef} {...provided.droppableProps} isDraggingOver={snapshot.isDraggingOver}>
-                                        {this.props.tasks.map((task, index) => <Task key={task.id} task={task} index={index}/>)}
+                                        {this.props.tasks.map((task, index) => <Task key={task.id} task={task} index={index} removeTask={this.props.removeTask} column={this.props.column}/>)}
                                         {provided.placeholder}
                                     </Tasks>
                                 )}
