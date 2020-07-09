@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+import Form from "./form";
 
-const Container=styled.div`
+const Container = styled.div`
     display: flex;
     align-items:center;
     padding:8px;
@@ -11,7 +12,7 @@ const Container=styled.div`
         background-color:#b0b0b0;
     }
 `
-const Plus=styled.div`
+const Plus = styled.div`
   display:inline-block;
   width:25px;
   height:25px;
@@ -25,21 +26,28 @@ const Plus=styled.div`
   background-repeat:no-repeat;
 `
 
-// class Form  extends React.Component{
-//     render() {
-//         return (
-//
-//         );
-//     }
-// }
 
-export  default class Button extends React.Component{
+export default class Button extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {showForm: false}
+        this.changeShow=this.changeShow.bind(this)
+    }
+
+    changeShow(){
+        this.setState({showForm:!this.state.showForm})
+    }
+
     render() {
         return (
-            <Container onClick={()=>this.props.addNewTask(this.props.column)}>
-                <Plus/>
-                <span>Добавить задание</span>
-            </Container>
+            (this.state.showForm)
+                ? <Form addNewTask={this.props.addNewTask} column={this.props.column} changeShow={this.changeShow}/>
+                :
+                <Container onClick={() => this.changeShow()}>
+                    <Plus/>
+                    <span>Добавить задание</span>
+                </Container>
+
         );
     }
 }

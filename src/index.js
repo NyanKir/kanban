@@ -16,8 +16,25 @@ class App extends React.Component {
         this.onDragEnd = this.onDragEnd.bind(this)
         this.addNewTask = this.addNewTask.bind(this)
     }
-    addNewTask=result=>{
-        console.log(result)
+    addNewTask=(column,value)=>{
+        if(!value){
+            return true;
+        }
+
+        const task=`task-${Object.keys(this.state.tasks).length+1}`;
+        const listTasks =this.state.tasks;
+        const listColumns =this.state.columns;
+
+        listTasks[task]={id:task,content:value}
+        column.tasksIDs.push(task)
+        listColumns[column.id]=column
+        const newState={
+            ...this.state,
+            tasks:listTasks,
+            columns:listColumns
+
+        }
+        this.setState(newState)
     }
 
     //Обработчик падения
