@@ -5,12 +5,13 @@ import {Draggable, Droppable} from "react-beautiful-dnd";
 import Button from "./button";
 
 const Container = styled.div`
+white-space: pre;
     transition:background-color .3s ease;
     background-color: #cfcfcf;
     height: fit-content;
-    font-family: Roboto,-apple-system,BlinkMacSystemFont,sans-serif;
+    max-width: 300px;
     width: 300px;
-    margin: 8px;
+    margin: 0px 8px;
     border: 1px solid lightgrey;
     border-radius: 2px;
 `;
@@ -20,6 +21,8 @@ const Title = styled.div`
     justify-content:space-between
 `;
 const Tasks = styled.div`
+    overflow-y:scroll;
+    max-height:70vh;
     padding: 8px;
     display: flex;
     flex-direction: column;

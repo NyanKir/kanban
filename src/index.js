@@ -4,10 +4,26 @@ import {DragDropContext, Droppable} from "react-beautiful-dnd";
 import initalData from "./inital-data"
 import styled from "styled-components";
 import Column from "./components/column";
+import Button from "./components/button";
+import "./style/index.scss";
+
 
 const Container = styled.div`
     display:flex;
 `
+const Wrapper =styled.div`
+    display:flex;
+    font-family: Roboto,-apple-system,BlinkMacSystemFont,sans-serif;
+    
+`
+const AddColumnWrapper=styled.div`
+    max-width: 300px;
+    min-width: 300px;
+    background: #cfcfcf;
+    border-radius: 2px;
+    height: fit-content;
+`
+
 
 class App extends React.Component {
     constructor(props) {
@@ -17,6 +33,35 @@ class App extends React.Component {
         this.addNewTask = this.addNewTask.bind(this)
         this.removeColumn = this.removeColumn.bind(this)
         this.removeTask = this.removeTask.bind(this)
+        this.addColumn = this.addColumn.bind(this)
+    }
+    addColumn(column,value){
+        if(!value){
+            return true;
+        }
+        this.setState((state)=>{
+            const columnOrder=state.columnOrder;
+            let idColumn, column={};
+            if(columnOrder.length !==0){
+                idColumn=`columns-${parseFloat(columnOrder.slice(-1)[0].slice(-1))+1}`;
+            }else{
+                idColumn='columns-1';
+            }
+            columnOrder.push(idColumn)
+            column[idColumn]={
+                id:idColumn,
+                title:value,
+                tasksIDs:[],
+            }
+            return{
+                ...state,
+                columns:{
+                    ...state.columns,
+                    ...column
+                },
+                columnOrder: columnOrder,
+            }
+        })
     }
     //Удаление колонны
     removeColumn(column,index){
@@ -26,44 +71,38 @@ class App extends React.Component {
             ...this.state
         })
     }
+
     //Удаление задания
     removeTask(task,column,index){
-
         this.setState((state)=>{
-            //Создаем копий
-            const Tasks=state.tasks;
-            const Columns=state.columns;
-            //Удалем
-            delete Tasks[task.id]
-            column.tasksIDs.splice(index,1)
-            Columns[column.id]=column
-            //Обновляем id заданний
-            const tasks={}
-            const tasksIDs = Object.values(Tasks).map((el,index)=>{
-                el['id']=`task-${index+1}`;
-                tasks[`task-${index+1}`]=el;
-                return `task-${index+1}`
-            })
-            //Добавления в 'tasksIDs' наши новые таски
-            Columns[column.id]['tasksIDs']=tasksIDs;
 
+            const tasks=state.tasks;
+            delete tasks[task.id]
+            column.tasksIDs.splice(index,1)
             return{
                 ...state,
-                tasks:tasks,
-                column:{
-                    ...state.column,
-                    Columns
+                columns:{
+                    ...state.columns,
+                    column
                 }
             }
         })
     }
+
     //Обработчик добавления задания
     addNewTask=(column,value)=>{
         if(!value){
             return true;
         }
 
-        const task=`task-${Object.keys(this.state.tasks).length+1}`;
+        let task;
+        const lastTask=Object.keys(this.state.tasks).slice(-1)[0];
+        if(lastTask=== undefined){
+            task =`task-1`;
+        }else{
+            task=`task-${parseInt(lastTask[lastTask.length-1])+1}`;
+
+        }
         const listTasks =this.state.tasks;
         const listColumns =this.state.columns;
 
@@ -160,34 +199,41 @@ class App extends React.Component {
 
     render() {
         return (
-            <DragDropContext onDragEnd={this.onDragEnd}>
-                <Droppable droppableId="all-columns" direction="horizontal" type="column">
-                    {
-                        (provided) => (
-                            <Container {...provided.droppableProps} ref={provided.innerRef}>
+            <Wrapper>
+                <DragDropContext onDragEnd={this.onDragEnd}>
+                    <Droppable droppableId="all-columns" direction="horizontal" type="column">
+                        {
+                            (provided) => (
+                                <Container {...provided.droppableProps} ref={provided.innerRef}>
 
-                                {
-                                    this.state.columnOrder.map((columnId, index) => {
-                                        const column = this.state.columns[columnId];
-                                        const tasks = column.tasksIDs.map((taskId) => this.state.tasks[taskId])
-                                        return <Column
-                                            tasks={tasks}
-                                            column={column}
-                                            key={columnId}
-                                            index={index}
-                                            addNewTask={this.addNewTask}
-                                            removeTask={this.removeTask}
-                                            removeColumn={this.removeColumn}
-                                        />
-                                    })
-                                }
-                                {provided.placeholder}
-                            </Container>
-                        )
-                    }
+                                    {
+                                        this.state.columnOrder.map((columnId, index) => {
+                                            const column = this.state.columns[columnId];
+                                            const tasks = column.tasksIDs.map((taskId) => this.state.tasks[taskId])
+                                            return <Column
+                                                tasks={tasks}
+                                                column={column}
+                                                key={columnId}
+                                                index={index}
+                                                addNewTask={this.addNewTask}
+                                                removeTask={this.removeTask}
+                                                removeColumn={this.removeColumn}
+                                            />
+                                        })
+                                    }
 
-                </Droppable>
-            </DragDropContext>
+                                    {provided.placeholder}
+                                </Container>
+                            )
+                        }
+
+                    </Droppable>
+                </DragDropContext>
+                <AddColumnWrapper>
+                    <Button addNewTask={this.addColumn} column={true}/>
+                </AddColumnWrapper>
+            </Wrapper>
+
 
         )
     }
