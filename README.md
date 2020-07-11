@@ -6,5 +6,4 @@ Kanban
 -
 - ReactJS
 - React Beautiful DND
-- SCSS  
 - styled-components
