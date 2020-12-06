@@ -1,8 +1,8 @@
 Kanban  
-Демо - https://nyankir.github.io/kanban/
+Demo - https://nyankir.github.io/kanban/
 ![alt text](./src/banner/banner.png)
 
-**Используемые технологии**:  
+**Technologies used**:  
 -
 - ReactJS
 - React Beautiful DND
